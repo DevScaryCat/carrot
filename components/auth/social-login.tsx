@@ -27,7 +27,7 @@ export default function SocialLogin() {
                 </Link>
                 <Link
                     className="primary-btn flex h-10 items-center justify-center gap-2"
-                    href="/sms"
+                    href="/auth/sms"
                 >
                     <ChatBubbleOvalLeftEllipsisIcon className="size-6" />
                     <span>Continue with SMS</span>
