@@ -5,5 +5,5 @@ export function checkBadword(text: string) {
   return filter.isProfane(text);
 }
 
-export const checkPasswords = ({ password, confirm_password }: { password: string; confirm_password: string }) =>
-  password === confirm_password;
+export const checkPasswords = ({ password, confirmPassword }: { password: string; confirmPassword: string }) =>
+  password === confirmPassword;

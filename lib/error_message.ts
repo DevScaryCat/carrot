@@ -10,6 +10,7 @@ const ERROR_MESSAGES = {
   ERROR_TOO_LOONG: "길이가 너무 깁니다.",
   ERROR_PASSWORD_MATCH: "비밀번호가 같지 않습니다.",
   ERROR_PASSWORD_SECURITY: "비밀번호는 소문자,대문자,숫자,특수문자를 포함해야합니다.",
+  ERROR_PHONE_FORMAT: "잘못된 형식의 전화번호 입니다.",
 };
 
 export default ERROR_MESSAGES;
