@@ -1,6 +1,20 @@
+
+import db from "@/lib/db";
 import Link from "next/link";
 
 export default function Home() {
+  async function test() {
+    const SMSToken = await db.sMSToken.findUnique({
+      where: {
+        id: 2,
+      }, include: {
+        user: true
+      }
+    });
+    console.log(SMSToken);
+  }
+
+  test();
   return (
     <div className="flex flex-col items-center justify-between min-h-screen p-6">
       <div className="my-auto flex flex-col items-center gap-2 *:font-medium">
