@@ -1,60 +1,71 @@
 "use server";
 import { z } from "zod";
 import bcrypt from "bcrypt";
-import { checkBadword, checkPasswords } from "@/lib/utils";
+import { checkBadword } from "@/lib/utils";
 import ERROR_MESSAGES from "@/lib/error_message";
-import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX } from "@/lib/constants";
+import { PASSWORD_MIN_LENGTH } from "@/lib/constants";
 import db from "@/lib/db";
-import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import getSession from "@/lib/session";
 
-const checkUserExist = async (username: string) => {
-  const findUser = await db.user.findUnique({
-    where: {
-      username: username,
-    },
-    select: {
-      id: true,
-    },
-  });
-  return !Boolean(findUser);
-  // Boolean() 함수는 매개변수로 사용되는 변수 혹은 표현식의 참/거짓 여부를 반환한다.
-};
-const checkEmailExist = async (email: string) => {
-  const findEmail = await db.user.findUnique({
-    where: {
-      email: email,
-    },
-    select: {
-      id: true,
-    },
-  });
-  return !Boolean(findEmail);
-  // Boolean() 함수는 매개변수로 사용되는 변수 혹은 표현식의 참/거짓 여부를 반환한다.
-};
+const checkPasswords = ({ password, confirmPassword }: { password: string; confirmPassword: string }) =>
+  password === confirmPassword;
 
 const formSchema = z
   .object({
     username: z
       .string({
-        required_error: ERROR_MESSAGES.ERROR_REQUIRED,
+        invalid_type_error: "Username must be a string!",
+        required_error: "Where is my username???",
       })
       .toLowerCase()
       .trim()
-      .refine((username) => !checkBadword(username), ERROR_MESSAGES.ERROR_BADWORD)
-      .refine(checkUserExist, ERROR_MESSAGES.ERROR_USERNAME_ALREADY_EXIST),
-    email: z.string().toLowerCase().refine(checkEmailExist, ERROR_MESSAGES.ERROR_EMAIL_ALREADY_EXIST),
-    password: z
-      .string()
-      .min(PASSWORD_MIN_LENGTH, ERROR_MESSAGES.ERROR_TOO_SHORT)
-      .regex(PASSWORD_REGEX, ERROR_MESSAGES.ERROR_PASSWORD_SECURITY),
-    confirmPassword: z.string().min(PASSWORD_MIN_LENGTH, ERROR_MESSAGES.ERROR_TOO_SHORT),
+      .refine((username) => !checkBadword(username), ERROR_MESSAGES.ERROR_BADWORD),
+    email: z.string().email().toLowerCase(),
+    password: z.string().min(PASSWORD_MIN_LENGTH),
+    confirmPassword: z.string().min(PASSWORD_MIN_LENGTH),
+  })
+  .superRefine(async ({ username }, ctx) => {
+    const user = await db.user.findUnique({
+      where: {
+        username,
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (user) {
+      ctx.addIssue({
+        code: "custom",
+        message: "This username is already taken",
+        path: ["username"],
+        fatal: true,
+      });
+      return z.NEVER;
+    }
+  })
+  .superRefine(async ({ email }, ctx) => {
+    const user = await db.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (user) {
+      ctx.addIssue({
+        code: "custom",
+        message: "This email is already taken",
+        path: ["email"],
+        fatal: true,
+      });
+      return z.NEVER;
+    }
   })
   .refine(checkPasswords, {
-    message: ERROR_MESSAGES.ERROR_PASSWORD_MATCH,
-    path: ["password"],
+    message: "Both passwords should be the same!",
+    path: ["confirmPassword"],
   });
 
 export async function createAccount(prevState: any, formData: FormData) {
@@ -64,7 +75,7 @@ export async function createAccount(prevState: any, formData: FormData) {
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
   };
-  const verifiedData = await formSchema.safeParseAsync(data);
+  const verifiedData = await formSchema.spa(data);
   // sefaParseAsync를 사용하는이유는 DB에서 유저와 이메일이 사용중인지 체크(통신/ 기다림)해야하기때문에 사용한다.
   if (!verifiedData.success) return verifiedData.error.flatten();
   else {
