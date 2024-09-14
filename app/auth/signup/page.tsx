@@ -23,7 +23,7 @@ export default function CreateAccount() {
                     required
                     errors={state?.fieldErrors.username}
                     minLength={3}
-                    maxLength={10}
+                    maxLength={20}
                 />
                 <Input
                     name="email"

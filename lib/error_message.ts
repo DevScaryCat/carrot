@@ -11,6 +11,9 @@ const ERROR_MESSAGES = {
   ERROR_PASSWORD_MATCH: "비밀번호가 같지 않습니다.",
   ERROR_PASSWORD_SECURITY: "비밀번호는 소문자,대문자,숫자,특수문자를 포함해야합니다.",
   ERROR_PHONE_FORMAT: "잘못된 형식의 전화번호 입니다.",
+  ERROR_USERNAME_ALREADY_EXIST: "이미 사용중인 유저이름입니다.",
+  ERROR_EMAIL_ALREADY_EXIST: "이미 사용중인 이메일입니다.",
+  ERROR_NOT_EXIST_EMAIL: "존재하지 않는 이메일입니다.",
 };
 
 export default ERROR_MESSAGES;

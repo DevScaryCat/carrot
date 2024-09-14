@@ -11,7 +11,6 @@ export default function Home() {
         user: true
       }
     });
-    console.log(SMSToken);
   }
 
   test();
