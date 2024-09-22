@@ -36,14 +36,6 @@ export default function Login() {
                 <Button name="Login" />
             </form>
             <SocialLogin />
-            <div className="flex justify-center w-full">
-                <Image
-                    src="/images/login/pepe_gatsby.png"
-                    alt="pepe_gatsby"
-                    width={200}
-                    height={200}
-                />
-            </div>
         </div>
     );
 }
