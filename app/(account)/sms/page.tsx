@@ -45,14 +45,6 @@ export default function SMSLogin() {
                     }
                 />
             </form>
-            <div className="flex justify-center w-full">
-                <Image
-                    src="/images/sms/pepe_phone.png"
-                    alt="pepe_phone"
-                    width={200}
-                    height={200}
-                />
-            </div>
         </div>
     );
 }
