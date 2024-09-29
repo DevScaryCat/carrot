@@ -4,7 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:infisical": "infisical run --env=dev --path=/apps/firefly -- npm run dev",
+    "dev:infisical": "infisical run -- npm run dev",
+    "studio": "infisical run -- npx prisma studio",
+    "migrate": "infisical run -- npx prisma migrate dev",
+    "generate": "infisical run -- npx prisma generate",
+    "push": "infisical run -- npx prisma db push",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
