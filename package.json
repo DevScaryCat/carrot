@@ -1,6 +1,7 @@
 {
   "name": "carrot",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,6 +10,7 @@
     "migrate": "infisical run -- npx prisma migrate dev",
     "generate": "infisical run -- npx prisma generate",
     "push": "infisical run -- npx prisma db push",
+    "seed": "infisical run -- node prisma/seed.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -29,6 +31,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.0.3",
     "@tailwindcss/forms": "^0.5.9",
     "@types/node": "^20",
     "@types/react": "^18",
