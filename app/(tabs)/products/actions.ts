@@ -2,7 +2,7 @@
 
 import PrismaDB from "@/lib/db";
 
-export async function getMoreProduts(page: number) {
+export async function getMoreProducts(page: number) {
   const products = await PrismaDB.product.findMany({
     select: {
       title: true,
@@ -11,8 +11,8 @@ export async function getMoreProduts(page: number) {
       photo: true,
       id: true,
     },
-    skip: 1,
-    take: 1,
+    skip: 20,
+    take: 20,
     orderBy: {
       created_at: "desc",
     },
