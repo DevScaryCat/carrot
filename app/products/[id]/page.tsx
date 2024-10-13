@@ -44,15 +44,28 @@ export default async function ProductDetail({
     const onDelete = async () => {
         "use server"
         if (!isOwner) return
-        await PrismaDB.product.delete({
+        const url = new URL(product.photo);
+        const path = url.pathname;
+        const photoId = path.split('/').pop();
+        const cloudflareDeletePromise = fetch(
+            `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/images/v1/${photoId}`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${process.env.CLOUDFLARE_API_KEY}`,
+                },
+            }
+        );
+        const prismaDeletePromise = PrismaDB.product.delete({
             where: {
                 id,
             },
             select: null,
         });
+        await Promise.all([cloudflareDeletePromise, prismaDeletePromise]);
         redirect("/products");
-
     }
+
     return (
         <div>
             <div className="relative aspect-square">
