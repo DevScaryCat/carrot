@@ -23,9 +23,9 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   } else {
-    // if (isPublicPath) {
-    //   return NextResponse.redirect(new URL("/products", request.url));
-    // }
+    if (isPublicPath) {
+      return NextResponse.redirect(new URL("/home", request.url));
+    }
   }
 }
 
