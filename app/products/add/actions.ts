@@ -3,24 +3,9 @@
 import PrismaDB from "@/lib/db";
 import getSession from "@/lib/session/getSession";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { productSchema } from "./schema";
 
-const productSchema = z.object({
-  photo: z.string({
-    required_error: "photo is required",
-  }),
-  title: z.string({
-    required_error: "title is required",
-  }),
-  description: z.string({
-    required_error: "description is required",
-  }),
-  price: z.coerce.number({
-    required_error: "price is required",
-  }),
-});
-
-export async function UploadProduct(_: any, formData: FormData) {
+export async function UploadProduct(formData: FormData) {
   const data = {
     photo: formData.get("photo"),
     title: formData.get("title"),
