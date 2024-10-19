@@ -4,8 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "next dev",
-    "dev:infisical": "infisical run -- npm run dev",
+    "dev:infisical": "infisical run -- pnpm run dev",
     "studio": "infisical run -- npx prisma studio",
     "migrate": "infisical run -- npx prisma migrate dev",
     "generate": "infisical run -- npx prisma generate",
